@@ -37,9 +37,9 @@ def upload(username):
             global app, db
             filename = secure_filename(file.filename)
             file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
-            sql_cmd = "INSERT INTO test (NAME, PATH) VALUES ('" + filename + "','" + os.path.join(app.config['UPLOAD_FOLDER'], filename) + "')"
-            db.engine.execute(sql_cmd)
-    return render_template('upload.html', name=username)
+    columns_data = db.engine.execute("SHOW FIELDS FROM test")
+    columns_name = {i['Field'] for i in columns_data if i['Field'] != 'ID'}
+    return render_template('upload.html', name=username, options=columns_name)
 
 def search(username):
     return render_template('search.html', name=username)

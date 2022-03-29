@@ -45,6 +45,13 @@
     </div>
   </header>
 
+  <select class="form-select" aria-label="Default select example">
+    <option selected>Record Test Name</option>
+    {% for option in options %}
+      <option value="'{{ option }}'">{{ option }}</option>
+    {% endfor %}
+  </select>
+
   <div class="mb-3">
     <form method="post" action="{{url_for('upload', username=name)}}" enctype="multipart/form-data">
       <label for="formFile" class="form-label"></label>
