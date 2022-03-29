@@ -46,7 +46,7 @@
   </header>
 
   <div class="mb-3">
-    <form method="post" action="{{url_for('function', username=name)}}" enctype="multipart/form-data">
+    <form method="post" action="{{url_for('upload', username=name)}}" enctype="multipart/form-data">
       <label for="formFile" class="form-label"></label>
       <p>
         <input class="form-control" type="file" id="formFile" name="file" >

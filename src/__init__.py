@@ -1,16 +1,24 @@
 from flask import Flask, render_template, request, redirect, url_for
 import os
 from werkzeug.utils import secure_filename
+from flask_sqlalchemy import SQLAlchemy
 
-UPLOAD_FOLDER = './upload'
+app = app = Flask(__name__)
+db = SQLAlchemy()
 
-def create_app():
-    app = Flask(__name__)
-    global UPLOAD_FOLDER
-    os.makedirs(UPLOAD_FOLDER, exist_ok=True)
+def create_app(upload_path='./upload'):
+    global app, db
+
+    app.config['UPLOAD_FOLDER'] = upload_path
+    os.makedirs(upload_path, exist_ok=True)
+
+    app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+    app.config['SQLALCHEMY_DATABASE_URI'] = "mysql+pymysql://root:00000000@localhost:3306/score"
+    db.init_app(app)
+
     app.add_url_rule('/','login', login, methods=['GET', 'POST'])
     app.add_url_rule('/home/<username>','home', home)
-    app.add_url_rule('/upload/<username>', 'upload', function, methods=['GET', 'POST'])
+    app.add_url_rule('/upload/<username>', 'upload', upload, methods=['GET', 'POST'])
     app.add_url_rule('/search/<username>', 'search', search)
     return app
 
@@ -26,10 +34,12 @@ def upload(username):
     if request.method == 'POST':
         file = request.files['file']
         if file:
+            global app, db
             filename = secure_filename(file.filename)
-            global UPLOAD_FOLDER
-            file.save(os.path.join(UPLOAD_FOLDER, filename))
-    return render_template('function.html', name=username)
+            file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+            sql_cmd = "INSERT INTO test (NAME, PATH) VALUES ('" + filename + "','" + os.path.join(app.config['UPLOAD_FOLDER'], filename) + "')"
+            db.engine.execute(sql_cmd)
+    return render_template('upload.html', name=username)
 
 def search(username):
     return render_template('search.html', name=username)
