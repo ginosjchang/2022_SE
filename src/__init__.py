@@ -42,4 +42,15 @@ def upload(username):
     return render_template('upload.html', name=username, options=columns_name)
 
 def search(username):
-    return render_template('search.html', name=username)
+    col_names = getName()
+    datas = db.engine.execute("SELECT * FROM test")
+    print(datas)
+    return render_template('search.html', name=username, col_names=col_names, students=datas)
+
+def getName():
+    global db
+    columns_data = db.engine.execute("SHOW COLUMNS FROM test")
+    columns_name = []
+    for item in columns_data:
+        columns_name.append(item[0])
+    return columns_name
