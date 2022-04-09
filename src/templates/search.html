@@ -38,12 +38,27 @@
     <div>
       <h3 class="float-md-start mb-0">成績登入查詢系統</h3>
       <nav class="nav nav-masthead justify-content-center float-md-end">
-        <a class="nav-link"  href="{{url_for('home', username=name)}}">首頁</a>
-        <a class="nav-link"  href="{{url_for('upload', username=name)}}">成績登入</a>
+        <a class="nav-link"  href="{{url_for('home', username = name)}}">首頁</a>
+        <a class="nav-link"  href="{{url_for('upload', username = name)}}">成績登入</a>
         <a class="nav-link active" aria-current="page" href="#">成績查詢</a>
       </nav>
     </div>
   </header>
+
+
+  <br>
+  <form method="post" action="{{url_for('search', username=name)}}" enctype="multipart/form-data">
+  <select class="form-select" name="table_names" aria-label="Default select example"  >
+    <option selected>Recorded Test Name</option>
+    {% for option in options %}
+      <option value="'{{ option }}'" name="table_option">{{ option }}</option>
+    {% endfor %}
+  </select>
+  <br>
+  <button class="btn btn-primary " type = "submit">查詢</button>
+</form>
+
+<br><br>
 
   <table class="table">
       <tr class="table-info">
@@ -62,7 +77,7 @@
   </table>
 
   <footer class="mt-auto text-white-50">
-    <p>Cover template for <a href="https://getbootstrap.com/" class="text-white">Bootstrap</a>, by <a href="https://twitter.com/mdo" class="text-white">@mdo</a>.</p>
+    <p>>NCKU 成績登入查詢系統</p>
   </footer>
 </div>
 

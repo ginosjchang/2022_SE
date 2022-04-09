@@ -45,25 +45,31 @@
     </div>
   </header>
 
-  <select class="form-select" aria-label="Default select example">
-    <option selected>Record Test Name</option>
-    {% for option in options %}
-      <option value="'{{ option }}'">{{ option }}</option>
-    {% endfor %}
-  </select>
+
+
 
   <div class="mb-3">
     <form method="post" action="{{url_for('upload', username=name)}}" enctype="multipart/form-data">
+
+      <select class="form-select" name="table_names" aria-label="Default select example"  >
+        <option selected>Recorded Test Name</option>
+        {% for option in options %}
+          <option value="'{{ option }}'" name="table_option">{{ option }}</option>
+        {% endfor %}
+      </select>
+
+
       <label for="formFile" class="form-label"></label>
       <p>
         <input class="form-control" type="file" id="formFile" name="file" >
+        <br><br>
         <button class="btn btn-primary" type = "submit">上傳</button>
       </p>
     </form>
   </div>
 
   <footer class="mt-auto text-white-50">
-    <p>Cover template for <a href="https://getbootstrap.com/" class="text-white">Bootstrap</a>, by <a href="https://twitter.com/mdo" class="text-white">@mdo</a>.</p>
+    <p>>NCKU 成績登入查詢系統</p>
   </footer>
 </div>
     

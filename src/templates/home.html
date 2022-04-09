@@ -45,16 +45,21 @@
     </div>
   </header>
 
+  
   <main class="px-3">
     <h1>Wellcome {{name}}</h1>
     <p class="lead">透過上傳圖片進行快速的成績登入系統</p>
-    <p class="lead">
-      <a href="#" class="btn btn-lg btn-secondary fw-bold border-white bg-white">Learn more</a>
-    </p>
+    <br><br>
+
+    <form method="post" action="{{url_for('home', username=name)}}" enctype="multipart/form-data">
+      <label class="lead" for="lname">建立成績資料表:</label><br>
+      <input type="text" id="lname" name="table_name" placeholder = "請輸入成績登記表名稱" value=""><br><br>
+      <input class="btn btn-primary" type="submit" value="上傳">
+    </form>
   </main>
 
   <footer class="mt-auto text-white-50">
-    <p>Cover template for <a href="https://getbootstrap.com/" class="text-white">Bootstrap</a>, by <a href="https://twitter.com/mdo" class="text-white">@mdo</a>.</p>
+    <p>NCKU 成績登入查詢系統</p>
   </footer>
 </div>
 

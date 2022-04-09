@@ -31,27 +31,21 @@
   <body class="text-center">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
 <main class="form-signin">
-  <form method="post" action="/">
+  <form method="post" action="/register/">
     <!--img class="mb-4" src="../assets/brand/bootstrap-logo.svg" alt="" width="72" height="57"-->
-    <h1 class="h3 mb-3 fw-normal">Please sign in</h1>
+    <h1 class="h3 mb-3 fw-normal">Register Your Account</h1>
 
     <div class="form-floating">
-      <input type="email" class="form-control" id="floatingInput" placeholder="name@example.com" name="account">
+      <input type="email" class="form-control" id="floatingInput" placeholder="name@example.com" name="register_account">
       <label for="floatingInput">Email address</label>
     </div>
     <div class="form-floating">
-      <input type="password" class="form-control" id="floatingPassword" placeholder="Password" name="password">
+      <input type="password" class="form-control" id="floatingPassword" placeholder="Password" name="Password">
       <label for="floatingPassword">Password</label>
     </div>
-    <div class="checkbox mb-3">
-      <label>
-        <input type="checkbox" value="remember-me"> Remember me
-        <a class="nav-link"  href="{{url_for('register')}}">註冊</a>
-        <p>{{failed_message}}</p>
-      </label>
-    </div>
-    <button class="w-100 btn btn-lg btn-primary" type="submit">Sign in</button>
-    <p class="mt-5 mb-3 text-muted">&copy; NCKU 成績登入查詢系統</p>
+    <p>{{failed_message}}</p>
+    <button class="w-100 btn btn-lg btn-primary" type="submit">Sign Up</button>
+    <p class="mt-5 mb-3 text-muted">&copy; 2017–2021</p>
   </form>
 </main>
 
