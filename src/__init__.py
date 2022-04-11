@@ -7,12 +7,12 @@ import cv2
 
 from recongnize import loadModel, recongnize
 
+global app, db, database_name
 
 app = app = Flask(__name__)
 db = SQLAlchemy()
 
 def create_app(upload_path='./upload'):
-    global app, db
 
     app.config['UPLOAD_FOLDER'] = upload_path
     os.makedirs(upload_path, exist_ok=True)
@@ -47,7 +47,7 @@ def register():
             register_result = insert_to_database(register_username, register_password)
         
         if register_result == "ok":
-            global database_name 
+             
             database_name = register_username[0:-10]
             db.engine.execute("CREATE DATABASE " + database_name + ";")
             return render_template('signin.html')
@@ -123,13 +123,21 @@ def insert_to_database(register_username, register_password):
 
 def upload(username):
     
+    database_name = username[0:-10]
+    query = db.engine.execute("SELECT table_name FROM information_schema.tables WHERE table_schema = '" + database_name + "';")
+    result = query.fetchall()
+    table_options = set()
+    
 
+    for item in result:
+        table_name = str(' ,'.join(item))
+        table_options.add(table_name)
     
     if request.method == 'POST':
         
         file = request.files['file']
         if file:
-            global app, db
+
             filename = secure_filename(file.filename)
             file_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
             file.save(file_path)
@@ -149,45 +157,22 @@ def upload(username):
             
             table_option = str(request.form.get("table_names"))
             table_option = table_option.replace('\'', "")
+            
+            if table_option == "Recorded Test Name":
+                return render_template('upload.html', name = username, options = table_options)
+            
+            
             database_name = username[0:-10]
             db.engine.execute("INSERT INTO " + database_name + "." + table_option + "(Student_Number, Score)\nVALUES('" + result[0] +"', "+ result[1] +");")
     
-    database_name = username[0:-10]
-    query = db.engine.execute("SELECT table_name FROM information_schema.tables WHERE table_schema = '"+ database_name +"';")
-    result = query.fetchall()
-    table_options = set()
     
-
-    for item in result:
-        table_name = str(' ,'.join(item))
-        table_options.add(table_name)
     
     return render_template('upload.html', name = username, options = table_options)
 
 def search(username):
     
-    if request.method == 'POST':
-        
-        database_name = username[0:-10]
-        query = db.engine.execute("SELECT table_name FROM information_schema.tables WHERE table_schema = '"+ database_name +"';")
-        result = query.fetchall()
-        table_options = set()
-    
-        for item in result:
-            table_name = str(' ,'.join(item))
-            table_options.add(table_name)
-           
-        table_option = str(request.form.get("table_names"))
-        table_option = table_option.replace('\'', "")
-        
-        col_names = getName(username, table_option)
-        print("ues")
-        database_name = username[0:-10]
-        datas = db.engine.execute("SELECT * FROM " + database_name + "." + table_option)
-        return render_template('search.html', name = username, options = table_options, col_names = col_names, students = datas)
-    
     database_name = username[0:-10]
-    query = db.engine.execute("SELECT table_name FROM information_schema.tables WHERE table_schema = '"+ database_name +"';")
+    query = db.engine.execute("SELECT table_name FROM information_schema.tables WHERE table_schema = '" + database_name + "';")
     result = query.fetchall()
     table_options = set()
     
@@ -195,10 +180,26 @@ def search(username):
         table_name = str(' ,'.join(item))
         table_options.add(table_name)
     
+    if request.method == 'POST':
+           
+        table_option = str(request.form.get("table_names"))
+        table_option = table_option.replace('\'', "")
+        
+            
+        if table_option == "Recorded Test Name":
+            return render_template('search.html', name = username, options = table_options)
+        
+        col_names = getName(username, table_option)
+        
+        database_name = username[0:-10]
+        datas = db.engine.execute("SELECT * FROM " + database_name + "." + table_option)
+        return render_template('search.html', name = username, options = table_options, col_names = col_names, students = datas)
+    
+    
+    
     return render_template('search.html', name = username, options = table_options)
 
 def getName(username, table_option):
-    global db
     
     database_name = username[0:-10]
     columns_data = db.engine.execute("SHOW COLUMNS FROM "+ database_name + "." + table_option)
